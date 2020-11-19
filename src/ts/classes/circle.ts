@@ -1,10 +1,12 @@
 import Constants from "./constants";
 import {CircleConfig, UpdateFunction} from "../types";
 import Canvas from "./canvas";
+import Animate from "./animate";
 
 const {color, mouse} = Constants;
 
 class Circle {
+    m: number;
     x: number;
     y: number;
     dx: number;
@@ -19,10 +21,12 @@ class Circle {
     c: Canvas;
     updateFunction: UpdateFunction;
     fillColor: string;
+    opacity: number;
 
-    constructor({canvas, x, y, dx, dy, r, dr, minR, maxR, influenceR, gravity, friction, updateFunction, fillColor}: CircleConfig) {
+    constructor({canvas, m, x, y, dx, dy, r, dr, minR, maxR, influenceR, gravity, friction, updateFunction, fillColor}: CircleConfig) {
         this.c = canvas;
 
+        this.m = m ? m : 1;
         this.x = x ? x : 1;
         this.y = y ? y : 1;
         this.dx = dx ? dx : 0.1;
@@ -34,30 +38,49 @@ class Circle {
         this.influenceR = influenceR ? influenceR : 40;
         this.gravity = gravity ? gravity : 0;
         this.friction = friction ? friction : 0;
-        this.updateFunction = updateFunction ? updateFunction : "brownian";
+        this.updateFunction = updateFunction ? updateFunction : "random";
         this.fillColor = fillColor ? fillColor : color.pallet[Math.floor(Math.random() * (color.pallet.length))];
+        this.opacity = 0.2;
     }
 
     draw = () => {
-        let ctx = this.c.ctx!;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI, false);
-        ctx.fillStyle = this.fillColor;
-        ctx.fill();
-        ctx.closePath();
+        if (this.updateFunction === "collision") {
+            let ctx = this.c.ctx!;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI, false);
+            ctx.save();
+            ctx.globalAlpha = this.opacity;
+            ctx.fillStyle = this.fillColor;
+            ctx.fill();
+            ctx.restore();
+            ctx.strokeStyle = this.fillColor;
+            ctx.stroke();
+            ctx.closePath();
+        } else {
+            let ctx = this.c.ctx!;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI, false);
+            ctx.fillStyle = this.fillColor;
+            ctx.fill();
+            ctx.closePath();
+        }
     }
 
-    update = () => {
-        if (this.updateFunction === "brownian") {
-            let c = this.c.c!;
-            if (this.x > c.width - this.r || this.x < this.r) {
-                this.dx = -this.dx;
-            }
-            if (this.y > c.height - this.r || this.y < this.r) {
-                this.dy = -this.dy;
-            }
-            this.x += this.dx;
-            this.y += this.dy;
+    move = () => {
+        let c = this.c.c!;
+        if (this.x > c.width - this.r || this.x < this.r) {
+            this.dx = -this.dx;
+        }
+        if (this.y > c.height - this.r || this.y < this.r) {
+            this.dy = -this.dy;
+        }
+        this.x += this.dx;
+        this.y += this.dy;
+    }
+
+    update = (animate: Animate) => {
+        if (this.updateFunction === "random") {
+            this.move();
 
             if (mouse.x - this.c.marginLeft - this.x < this.influenceR && mouse.x - this.c.marginLeft - this.x > -this.influenceR &&
                 mouse.y - this.y < this.influenceR && mouse.y - this.y > -this.influenceR &&
@@ -69,6 +92,7 @@ class Circle {
         } else if (this.updateFunction === "gravity") {
             let c = this.c.c!;
             if (this.y + this.r + this.dy > c.height) {
+                this.y = c.height - this.r;
                 this.dy = -this.dy * this.friction;
             } else {
                 this.dy += this.gravity;
@@ -81,6 +105,40 @@ class Circle {
             this.dx = this.dx * 0.999;
             this.x += this.dx;
             this.y += this.dy;
+        } else if (this.updateFunction === "collision") {
+            this.move();
+
+            if (this.opacity > 0.2) {
+                this.opacity -= 0.01;
+            }
+            for (let i = 0; i < animate.objects.length; i++) {
+                let obj = animate.objects[i];
+                if (this === obj) {
+                    continue;
+                }
+                if (Math.hypot(this.x - obj.x, this.y - obj.y) <= this.r + obj.r) {
+                    if (this.opacity < 1) {
+                        this.opacity += 0.1;
+                    }
+                    if (obj.opacity < 1) {
+                        obj.opacity += 0.1;
+                    }
+                    let u1x = this.dx;
+                    let u1y = this.dy;
+                    let u2x = obj.dx;
+                    let u2y = obj.dy;
+                    let m1 = this.m;
+                    let m2 = obj.m;
+
+                    this.dx = ((m1 - m2) * u1x / (m1 + m2)) + 2 * m2 * u2x / (m1 + m2);
+                    this.dy = ((m1 - m2) * u1y / (m1 + m2)) + 2 * m2 * u2y / (m1 + m2);
+
+                    obj.dx = (2 * m1 * u1x / (m1 + m2)) + (m2 - m1) * u2x / (m1 + m2);
+                    obj.dy = (2 * m1 * u1y / (m1 + m2)) + (m2 - m1) * u2y / (m1 + m2);
+                }
+            }
+        } else {
+            console.error("Invalid Update Function");
         }
 
         this.draw();

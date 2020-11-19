@@ -10,6 +10,7 @@ export type Mouse = {
 }
 
 export type CircleConfig = {
+    m?: number,
     x?: number,
     y?: number,
     dx?: number,
@@ -32,4 +33,4 @@ export type CanvasConfig = {
     width?: number
 }
 
-export type UpdateFunction = "brownian" | "gravity";
+export type UpdateFunction = "random" | "gravity" | "collision";

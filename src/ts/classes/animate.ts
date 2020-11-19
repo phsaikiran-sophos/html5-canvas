@@ -9,7 +9,10 @@ class Animate {
     frames: number;
 
     constructor(canvas: Canvas) {
+        this.objects = [];
         this.c = canvas;
+        this.startTime = new Date().getTime();
+        this.frames = 0;
     }
 
     init = () => {
@@ -22,12 +25,13 @@ class Animate {
         this.frames += 1;
 
         let curr = new Date().getTime();
-        this.c.ctx!.font = "20px Arial";
+        this.c.ctx!.font = "13px Arial";
         this.c.ctx!.fillStyle = 'black';
-        this.c.ctx!.fillText((this.frames * 1000 / (curr - this.startTime)).toFixed(2) + " fps", 10, 30);
+        let updateFunction = this.objects!.length == 0 ? "" : this.objects![0].updateFunction;
+        this.c.ctx!.fillText(updateFunction + " | " + (this.frames * 1000 / (curr - this.startTime)).toFixed(2) + " fps", 10, 20);
 
         this.objects!.forEach((object) => {
-            object.update();
+            object.update(this);
         });
 
         if (curr - this.startTime > 1000) {
