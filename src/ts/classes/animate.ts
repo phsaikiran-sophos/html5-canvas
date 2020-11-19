@@ -26,7 +26,7 @@ class Animate {
 
         let curr = new Date().getTime();
         this.c.ctx!.font = "13px Arial";
-        this.c.ctx!.fillStyle = 'black';
+        this.c.ctx!.fillStyle = '#bfac9b';
         let updateFunction = this.objects!.length == 0 ? "" : this.objects![0].updateFunction;
         this.c.ctx!.fillText(updateFunction + " | " + (this.frames * 1000 / (curr - this.startTime)).toFixed(2) + " fps", 10, 20);
 
