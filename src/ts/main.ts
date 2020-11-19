@@ -62,14 +62,14 @@ class Main {
         }));
         collision.init = () => {
             collision.objects = [];
-            for (let i = 0; i < 50; i++) {
-                let r = 15;
+            for (let i = 0; i < 100; i++) {
+                let r = Math.random() * 5 + 10;
                 let config: CircleConfig = {
                     canvas: collision.c,
                     x: Math.random() * (collision.c.width - r * 2) + r,
                     y: Math.random() * (collision.c.height - r * 2) + r,
-                    dx: (Math.random() - 0.5) * 10,
-                    dy: (Math.random() - 0.5) * 10,
+                    dx: (Math.random() - 0.5) * 20,
+                    dy: (Math.random() - 0.5) * 20,
                     r: r,
                     m: Math.random() * 4 + 1,
                     updateFunction: "collision"

@@ -92,7 +92,6 @@ class Circle {
         } else if (this.updateFunction === "gravity") {
             let c = this.c.c!;
             if (this.y + this.r + this.dy > c.height) {
-                this.y = c.height - this.r;
                 this.dy = -this.dy * this.friction;
             } else {
                 this.dy += this.gravity;
@@ -109,14 +108,14 @@ class Circle {
             this.move();
 
             if (this.opacity > 0.2) {
-                this.opacity -= 0.01;
+                this.opacity -= 0.02;
             }
             for (let i = 0; i < animate.objects.length; i++) {
                 let obj = animate.objects[i];
                 if (this === obj) {
                     continue;
                 }
-                if (Math.hypot(this.x - obj.x, this.y - obj.y) <= this.r + obj.r) {
+                if (Math.hypot(this.x + this.dx - obj.x - obj.dx, this.y + this.dy - obj.y - obj.dy) <= this.r + obj.r) {
                     if (this.opacity < 1) {
                         this.opacity += 0.1;
                     }
