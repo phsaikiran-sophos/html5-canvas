@@ -117,10 +117,10 @@ class Circle {
                 }
                 if (Math.hypot(this.x + this.dx - obj.x - obj.dx, this.y + this.dy - obj.y - obj.dy) <= this.r + obj.r) {
                     if (this.opacity < 1) {
-                        this.opacity += 0.1;
+                        this.opacity += 0.2;
                     }
                     if (obj.opacity < 1) {
-                        obj.opacity += 0.1;
+                        obj.opacity += 0.2;
                     }
                     let u1x = this.dx;
                     let u1y = this.dy;

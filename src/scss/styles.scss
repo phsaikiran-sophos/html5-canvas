@@ -7,13 +7,13 @@
 
 .grid-item {
   display: flex;
-  flex-basis: 48%;
+  flex-basis: min(80vw, 1000px);
   flex-direction: column;
   justify-content: center;
 }
 
 .canvas {
-  margin: 2vh auto;
+  margin: 2vh auto 0 auto;
   border: lightgray 0.5px solid;
   border-radius: 5px;
 }

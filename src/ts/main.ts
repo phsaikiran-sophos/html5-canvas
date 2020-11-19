@@ -12,7 +12,7 @@ class Main {
         let random = new Animate(new Canvas({
             id: "random",
             height: window.innerHeight * 0.4,
-            width: window.innerWidth * 0.48
+            width: Math.min(window.innerWidth * 0.8, 1000)
         }));
         random.init = () => {
             random.objects = [];
@@ -34,7 +34,7 @@ class Main {
         let gravity = new Animate(new Canvas({
             id: "gravity",
             height: window.innerHeight * 0.4,
-            width: window.innerWidth * 0.48
+            width: Math.min(window.innerWidth * 0.8, 1000)
         }));
         gravity.init = () => {
             gravity.objects = [];
@@ -58,7 +58,7 @@ class Main {
         let collision = new Animate(new Canvas({
             id: "collision",
             height: window.innerHeight * 0.4,
-            width: window.innerWidth * 0.48
+            width: Math.min(window.innerWidth * 0.8, 1000)
         }));
         collision.init = () => {
             collision.objects = [];
@@ -76,6 +76,7 @@ class Main {
                 }
 
                 if (i !== 0) {
+                    let failSafe = 0;
                     for (let j = 0; j < collision.objects.length; j++) {
                         let obj = collision.objects[j];
                         if (Math.hypot(config.x! - obj.x, config.y! - obj.y) <= obj.r + config.r!) {
@@ -87,6 +88,10 @@ class Main {
                                 dy: (Math.random() - 0.5) * 10,
                             }
                             j = -1;
+                            failSafe += 1;
+                            if (failSafe > 100) {
+                                break;
+                            }
                         }
                     }
                 }
@@ -98,7 +103,7 @@ class Main {
         let tbd = new Animate(new Canvas({
             id: "tbd",
             height: window.innerHeight * 0.4,
-            width: window.innerWidth * 0.48
+            width: Math.min(window.innerWidth * 0.6, 1000)
         }));
         tbd.init = () => {
             tbd.objects = [];
@@ -109,4 +114,14 @@ class Main {
 }
 
 let main = new Main();
-main.init()
+main.init();
+
+let resizeId: NodeJS.Timeout;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeId);
+    resizeId = setTimeout(doneResizing, 500);
+});
+
+function doneResizing() {
+    main.init();
+}
