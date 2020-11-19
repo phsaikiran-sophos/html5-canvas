@@ -59,7 +59,7 @@ class Circle {
             this.x += this.dx;
             this.y += this.dy;
 
-            if (mouse.x - this.x < this.influenceR && mouse.x - this.x > -this.influenceR &&
+            if (mouse.x - this.c.marginLeft - this.x < this.influenceR && mouse.x - this.c.marginLeft - this.x > -this.influenceR &&
                 mouse.y - this.y < this.influenceR && mouse.y - this.y > -this.influenceR &&
                 this.r < this.maxR) {
                 this.r += this.dr;

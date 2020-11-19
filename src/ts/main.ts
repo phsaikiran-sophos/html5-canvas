@@ -31,7 +31,6 @@ class Main {
         }
         bubbles.start();
 
-
         let gravity = new Animate(new Canvas({
             id: "gravity",
             height: window.innerHeight * 0.5,

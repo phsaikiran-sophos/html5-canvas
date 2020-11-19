@@ -1,7 +1,13 @@
-# HTML5 Canvas App with React
+# HTML5 Canvas App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Setup
+
+````
+yarn install
+yarn build
+yarn serve
+````
 
 ## Demo
 
-[Click here](http://phsaikiran-sophos.github.io/html5-canvas) for the demo.
+[Click here](http://phsaikiran.github.io/html5-canvas) for the demo.
