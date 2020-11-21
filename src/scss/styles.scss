@@ -23,3 +23,20 @@ body {
   flex-direction: column;
   justify-content: center;
 }
+
+.menu {
+  height: 30px;
+  background-color: #242424;
+}
+
+label {
+  color: #bfac9b;
+  padding-left: 10px;
+}
+
+.menu-item {
+  margin-top: 5px;
+  margin-left: 6px;
+  background-color: #bfac9b;
+  color: black;
+}

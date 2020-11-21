@@ -2,7 +2,6 @@ import Screen from "./screen";
 import {sObject, TextConfig} from "../types";
 
 class sText extends sObject<sText> {
-
     scr: Screen;
     text: string;
     x: number;

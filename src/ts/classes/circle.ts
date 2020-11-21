@@ -25,9 +25,9 @@ class sCircle extends sObject<sCircle> {
 
     svgCircle: SVGCircleElement;
 
-    constructor({screen, temp, m, x, y, dx, dy, r, dr, minR, maxR, influenceR, gravity, friction, updateFunction, fillColor, opacity}: CircleConfig) {
+    constructor({scr, temp, m, x, y, dx, dy, r, dr, minR, maxR, influenceR, gravity, friction, updateFunction, fillColor, opacity}: CircleConfig) {
         super();
-        this.scr = screen;
+        this.scr = scr;
         this.temp = temp ? temp : false;
         this.m = m ? m : 1;
         this.x = x ? x : 1;
@@ -94,7 +94,7 @@ class sCircle extends sObject<sCircle> {
             this.move();
 
             if (mouse.x - this.scr.left - this.x < this.influenceR && mouse.x - this.scr.left - this.x > -this.influenceR &&
-                mouse.y - this.y < this.influenceR && mouse.y - this.y > -this.influenceR &&
+                mouse.y - this.scr.top - this.y < this.influenceR && mouse.y - this.scr.top - this.y > -this.influenceR &&
                 this.r < this.maxR) {
                 this.r += this.dr;
             } else if ((this.r - this.dr + 1) > this.minR) {

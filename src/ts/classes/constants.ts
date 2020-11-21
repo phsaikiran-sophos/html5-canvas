@@ -1,7 +1,6 @@
 import {Color, Mouse, Scroll} from "../types";
 
 class Constants {
-
     color: Color;
     mouse: Mouse;
     relMouse: Mouse;
@@ -14,38 +13,34 @@ class Constants {
     constructor() {
         this.color = {
             pallet: [
-                'rgba(14,64,97,1)',
-                'rgba(103,179,230,1)',
-                'rgba(31,147,224,1)',
-                'rgba(96,103,107,1)',
-                'rgba(24,113,173,1)',
-                'rgba(191,172,155,1)',
-                'rgba(217,143,78,1)',
-                'rgba(191,110,63,1)',
-                'rgba(166,88,60,1)',
-                'rgba(92,47,36,1)'
+                '#0E4061',
+                '#67B3E6',
+                '#1F93E0',
+                '#60676B',
+                '#1871AD',
+                '#BFAC9B',
+                '#D98F4E',
+                '#BF6E3F',
+                '#A6583C',
+                '#5C2F24'
             ]
         };
-
         this.mouse = {
             x: 0,
             y: 0
-        }
-
+        };
         this.relMouse = {
             x: 0,
             y: 0
-        }
-
+        };
         this.scroll = {
             top: 0,
             left: 0
-        }
-
+        };
         this.canvas = {
             height: window.innerHeight * 0.4,
             width: Math.min(window.innerWidth * 0.8, 1300)
-        }
+        };
     }
 }
 

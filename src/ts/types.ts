@@ -26,7 +26,7 @@ export class sObject<T> {
 }
 
 export type CircleConfig = {
-    screen: Screen,
+    scr: Screen,
     temp?: boolean,
     m?: number,
     x?: number,

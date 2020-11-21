@@ -4,7 +4,6 @@ import Screen from "./classes/screen";
 import Constants from "./classes/constants";
 
 class Main {
-
     init = () => {
         let random = new Screen({
             id: "random",
@@ -16,7 +15,7 @@ class Main {
             random.objects = [];
             for (let i = 0; i < 600; i++) {
                 let config: CircleConfig = {
-                    screen: random,
+                    scr: random,
                     x: Math.random() * (random.width - 4 * 2) + 4,
                     y: Math.random() * (random.height - 4 * 2) + 4,
                     dx: (Math.random() - 0.5) * 10,
@@ -40,7 +39,7 @@ class Main {
             gravity.objects = [];
             for (let i = 0; i < 100; i++) {
                 let config: CircleConfig = {
-                    screen: gravity,
+                    scr: gravity,
                     x: Math.random() * (gravity.width - 30 * 2) + 30,
                     y: Math.random() * (gravity.height - 30 * 2) + 30,
                     dx: (Math.random() - 0.5) * 5,
@@ -67,7 +66,7 @@ class Main {
             for (let i = 0; i < 100; i++) {
                 let r = Math.random() * 5 + 10;
                 let config: CircleConfig = {
-                    screen: collision,
+                    scr: collision,
                     temp: true,
                     x: Math.random() * (collision.width - r * 2) + r,
                     y: Math.random() * (collision.height - r * 2) + r,
@@ -112,6 +111,7 @@ class Main {
 
         let tbd = new Screen({
             id: "tbd",
+            type: "svg",
             height: Constants.canvas.height,
             width: Constants.canvas.width
         });
@@ -120,7 +120,6 @@ class Main {
         }
         tbd.start();
     }
-
 }
 
 let main = new Main();
