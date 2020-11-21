@@ -37,7 +37,7 @@ class sText extends sObject<sText> {
     }
 
     update = () => {
-        let text = this.scr.name + " | " + this.scr.type + " | " + this.scr.fps.toFixed(2) + " fps";
+        let text = this.scr.name + " | " + this.scr.type + " | " + this.scr.fps.toFixed(2) + " fps | dt = " + this.scr.dt + "ms";
         if (this.scr.type === "canvas") {
             this.scr.ctx.font = this.fontSize + "px " + this.fontFamily;
             this.scr.ctx.fillStyle = this.fillColor;

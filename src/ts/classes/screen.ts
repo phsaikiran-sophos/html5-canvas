@@ -22,7 +22,11 @@ class Screen {
     state: "neverStarted" | "paused" | "running" | "stopped" | "stateChange";
     objects: any[];
     startTime: number;
+    restartTime: number;
+    prevTime: number;
+    prevAccTime: number;
     frames: number;
+    dtAccum: number;
 
     constructor({id, name, type, height, width}: ScreenConfig) {
         this.id = id;
@@ -135,7 +139,11 @@ class Screen {
             this.state = "neverStarted";
             this.objects = [];
             this.startTime = new Date().getTime();
+            this.restartTime = this.startTime;
+            this.prevTime = this.startTime;
+            this.prevAccTime = this.startTime;
             this.frames = 0;
+            this.dtAccum = 0;
         } else {
             this.state = "running";
             this.start();
@@ -169,7 +177,7 @@ class Screen {
             fillColor: "#bfac9b"
         }
         this.objects.push(new Text(textConfig));
-        this.startTime = new Date().getTime();
+        this.restartTime = new Date().getTime();
         this.frames = 0;
         this.state = "running";
     }
@@ -202,7 +210,7 @@ class Screen {
             fillColor: "#bfac9b"
         }
         this.objects.push(new Text(textConfig))
-        this.startTime = new Date().getTime();
+        this.restartTime = new Date().getTime();
         this.frames = 0;
         this.state = "running";
     }
@@ -245,13 +253,15 @@ class Screen {
 
     updateFrameData = () => {
         let curr = new Date().getTime();
-        this.dt = curr - this.startTime;
-        this.fps = this.frames * 1000 / this.dt;
-        if (this.dt > 1000) {
-            this.startTime = curr;
+        this.dt = curr - this.prevTime;
+        this.dtAccum = curr - this.prevAccTime;
+        this.fps = this.frames * 1000 / this.dtAccum;
+        if (this.dtAccum > 1000) {
+            this.prevAccTime = curr;
             this.frames = 0;
             this.updateBounding();
         }
+        this.prevTime = curr;
     }
 
     updateFrame = () => {

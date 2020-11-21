@@ -39,7 +39,7 @@ class Constants {
         };
         this.canvas = {
             height: window.innerHeight * 0.4,
-            width: Math.min(window.innerWidth * 0.8, 1300)
+            width: Math.min(window.innerWidth * 0.8, 1000)
         };
     }
 }
