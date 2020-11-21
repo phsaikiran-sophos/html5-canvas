@@ -155,6 +155,9 @@ class Screen {
     }
 
     restart = () => {
+        if (this.type === "svg") {
+            this.svg.innerHTML = "";
+        }
         this.state = "paused";
         this.init();
         let textConfig: TextConfig = {
