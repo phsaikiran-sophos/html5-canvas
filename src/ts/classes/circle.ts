@@ -1,11 +1,12 @@
 import Constants from "./constants";
-import {CircleConfig, UpdateFunction} from "../types";
-import Canvas from "./canvas";
-import Animate from "./animate";
+import {CircleConfig, UpdateFunction, sObject} from "../types";
+import Screen from "./screen";
 
 const {color, mouse} = Constants;
 
-class Circle {
+class sCircle extends sObject<sCircle> {
+    scr: Screen;
+    temp: boolean;
     m: number;
     x: number;
     y: number;
@@ -18,14 +19,16 @@ class Circle {
     influenceR: number;
     gravity: number;
     friction: number;
-    c: Canvas;
     updateFunction: UpdateFunction;
     fillColor: string;
     opacity: number;
 
-    constructor({canvas, m, x, y, dx, dy, r, dr, minR, maxR, influenceR, gravity, friction, updateFunction, fillColor}: CircleConfig) {
-        this.c = canvas;
+    svgCircle: SVGCircleElement;
 
+    constructor({screen, temp, m, x, y, dx, dy, r, dr, minR, maxR, influenceR, gravity, friction, updateFunction, fillColor, opacity}: CircleConfig) {
+        super();
+        this.scr = screen;
+        this.temp = temp ? temp : false;
         this.m = m ? m : 1;
         this.x = x ? x : 1;
         this.y = y ? y : 1;
@@ -34,18 +37,23 @@ class Circle {
         this.r = r ? r : 5;
         this.dr = dr ? dr : 2;
         this.minR = minR ? minR : this.r;
-        this.maxR = maxR ? maxR : 40;
+        this.maxR = maxR ? maxR : 20;
         this.influenceR = influenceR ? influenceR : 40;
         this.gravity = gravity ? gravity : 0;
         this.friction = friction ? friction : 0;
         this.updateFunction = updateFunction ? updateFunction : "random";
         this.fillColor = fillColor ? fillColor : color.pallet[Math.floor(Math.random() * (color.pallet.length))];
-        this.opacity = 0.2;
+        this.opacity = opacity ? opacity : 1;
+
+        if (this.scr.type === "svg" && !temp) {
+            this.svgCircle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+            this.scr.svg.appendChild(this.svgCircle);
+        }
     }
 
     draw = () => {
-        if (this.updateFunction === "collision") {
-            let ctx = this.c.ctx!;
+        if (this.scr.type === "canvas") {
+            let ctx = this.scr.ctx;
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI, false);
             ctx.save();
@@ -56,33 +64,36 @@ class Circle {
             ctx.strokeStyle = this.fillColor;
             ctx.stroke();
             ctx.closePath();
-        } else {
-            let ctx = this.c.ctx!;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI, false);
-            ctx.fillStyle = this.fillColor;
-            ctx.fill();
-            ctx.closePath();
+        } else if (this.scr.type === "svg") {
+            this.svgCircle.setAttributeNS(null, "cx", String(this.x));
+            this.svgCircle.setAttributeNS(null, "cy", String(this.y));
+            this.svgCircle.setAttributeNS(null, "r", String(this.r));
+            this.svgCircle.setAttributeNS(null, "stroke", this.fillColor);
+            this.svgCircle.setAttributeNS(null, "fill", this.fillColor);
+            this.svgCircle.setAttributeNS(null, "fill-opacity", String(this.opacity));
         }
     }
 
     move = () => {
-        let c = this.c.c!;
-        if (this.x > c.width - this.r || this.x < this.r) {
+        if (this.x > this.scr.width - this.r || this.x < this.r) {
             this.dx = -this.dx;
         }
-        if (this.y > c.height - this.r || this.y < this.r) {
+        if (this.y > this.scr.height - this.r || this.y < this.r) {
             this.dy = -this.dy;
         }
         this.x += this.dx;
         this.y += this.dy;
     }
 
-    update = (animate: Animate) => {
+    colliding = (that: sCircle) => {
+        return Math.hypot(this.x + this.dx - that.x - that.dx, this.y + this.dy - that.y - that.dy) <= this.r + that.r;
+    }
+
+    update = () => {
         if (this.updateFunction === "random") {
             this.move();
 
-            if (mouse.x - this.c.marginLeft - this.x < this.influenceR && mouse.x - this.c.marginLeft - this.x > -this.influenceR &&
+            if (mouse.x - this.scr.left - this.x < this.influenceR && mouse.x - this.scr.left - this.x > -this.influenceR &&
                 mouse.y - this.y < this.influenceR && mouse.y - this.y > -this.influenceR &&
                 this.r < this.maxR) {
                 this.r += this.dr;
@@ -90,14 +101,13 @@ class Circle {
                 this.r -= this.dr;
             }
         } else if (this.updateFunction === "gravity") {
-            let c = this.c.c!;
-            if (this.y + this.r + this.dy > c.height) {
+            if (this.y + this.r + this.dy > this.scr.height) {
                 this.dy = -this.dy * this.friction;
             } else {
                 this.dy += this.gravity;
             }
 
-            if (this.x + this.r + this.dx >= c.width || this.x - this.r <= 0) {
+            if (this.x + this.r + this.dx >= this.scr.width || this.x - this.r <= 0) {
                 this.dx = -this.dx;
             }
 
@@ -110,12 +120,12 @@ class Circle {
             if (this.opacity > 0.2) {
                 this.opacity -= 0.02;
             }
-            for (let i = 0; i < animate.objects.length; i++) {
-                let obj = animate.objects[i];
+            for (let i = 0; i < this.scr.objects.length; i++) {
+                let obj: sCircle = this.scr.objects[i];
                 if (this === obj) {
                     continue;
                 }
-                if (Math.hypot(this.x + this.dx - obj.x - obj.dx, this.y + this.dy - obj.y - obj.dy) <= this.r + obj.r) {
+                if (this.colliding(obj)) {
                     if (this.opacity < 1) {
                         this.opacity += 0.2;
                     }
@@ -144,4 +154,4 @@ class Circle {
     }
 }
 
-export default Circle;
+export default sCircle;

@@ -1,4 +1,4 @@
-import Canvas from "./classes/canvas";
+import Screen from "./classes/screen";
 
 export type Color = {
     readonly pallet: string[]
@@ -14,7 +14,20 @@ export type Scroll = {
     left: number
 }
 
+export class sObject<T> {
+    update = () => {
+        console.log("Update not defined");
+    }
+
+    // @ts-ignore
+    colliding = (that: T) => {
+        console.log("Colliding not defined");
+    }
+}
+
 export type CircleConfig = {
+    screen: Screen,
+    temp?: boolean,
     m?: number,
     x?: number,
     y?: number,
@@ -27,13 +40,25 @@ export type CircleConfig = {
     influenceR?: number,
     gravity?: number,
     friction?: number,
-    canvas: Canvas,
     updateFunction?: UpdateFunction,
-    fillColor?: string
+    fillColor?: string,
+    opacity?: number
 }
 
-export type CanvasConfig = {
+export type TextConfig = {
+    scr: Screen,
+    text?: string
+    x?: number,
+    y?: number,
+    fontSize?: string,
+    fontFamily?: string,
+    fillColor?: string,
+}
+
+export type ScreenConfig = {
     id: string,
+    name?: string,
+    type?: "canvas" | "svg",
     height?: number,
     width?: number
 }
