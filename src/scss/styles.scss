@@ -1,5 +1,6 @@
 html {
   background-color: black;
+  scroll-behavior: smooth;
 }
 
 .grid {
@@ -11,7 +12,7 @@ html {
 
 .grid-item {
   display: flex;
-  flex-basis: min(80vw, 1000px);
+  flex-basis: min(80vw, 1300px);
   flex-direction: column;
   justify-content: center;
 }

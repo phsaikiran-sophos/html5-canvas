@@ -9,6 +9,11 @@ export type Mouse = {
     y: number
 }
 
+export type Scroll = {
+    top: number,
+    left: number
+}
+
 export type CircleConfig = {
     m?: number,
     x?: number,

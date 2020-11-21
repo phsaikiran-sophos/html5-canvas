@@ -15,11 +15,11 @@ class Canvas {
         if (this.c) {
             this.height = height ? height : 300;
             this.width = width ? width : 400;
-            let style = window.getComputedStyle(this.c);
-            this.marginLeft = Number(style.marginLeft.slice(0, -2));
             this.c.height = this.height;
             this.c.width = this.width;
             this.ctx = this.c.getContext("2d");
+            let style = window.getComputedStyle(this.c);
+            this.marginLeft = Number(style.marginLeft.slice(0, -2));
         } else {
             this.ctx = null;
         }

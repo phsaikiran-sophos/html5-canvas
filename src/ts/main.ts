@@ -2,6 +2,7 @@ import Canvas from "./classes/canvas";
 import Circle from "./classes/circle";
 import {CircleConfig} from "./types";
 import Animate from "./classes/animate";
+import Constants from "./classes/constants";
 
 class Main {
 
@@ -11,8 +12,8 @@ class Main {
     init = () => {
         let random = new Animate(new Canvas({
             id: "random",
-            height: window.innerHeight * 0.4,
-            width: Math.min(window.innerWidth * 0.8, 1000)
+            height: Constants.canvas.height,
+            width: Constants.canvas.width
         }));
         random.init = () => {
             random.objects = [];
@@ -33,8 +34,8 @@ class Main {
 
         let gravity = new Animate(new Canvas({
             id: "gravity",
-            height: window.innerHeight * 0.4,
-            width: Math.min(window.innerWidth * 0.8, 1000)
+            height: Constants.canvas.height,
+            width: Constants.canvas.width
         }));
         gravity.init = () => {
             gravity.objects = [];
@@ -57,8 +58,8 @@ class Main {
 
         let collision = new Animate(new Canvas({
             id: "collision",
-            height: window.innerHeight * 0.4,
-            width: Math.min(window.innerWidth * 0.8, 1000)
+            height: Constants.canvas.height,
+            width: Constants.canvas.width
         }));
         collision.init = () => {
             collision.objects = [];
@@ -102,8 +103,8 @@ class Main {
 
         let tbd = new Animate(new Canvas({
             id: "tbd",
-            height: window.innerHeight * 0.4,
-            width: Math.min(window.innerWidth * 0.6, 1000)
+            height: Constants.canvas.height,
+            width: Constants.canvas.width
         }));
         tbd.init = () => {
             tbd.objects = [];
@@ -116,12 +117,12 @@ class Main {
 let main = new Main();
 main.init();
 
-let resizeId: NodeJS.Timeout;
-window.addEventListener('resize', () => {
-    clearTimeout(resizeId);
-    resizeId = setTimeout(doneResizing, 500);
-});
-
-function doneResizing() {
-    main.init();
-}
+// let resizeId: NodeJS.Timeout;
+// window.addEventListener('resize', () => {
+//     clearTimeout(resizeId);
+//     resizeId = setTimeout(doneResizing, 500);
+// });
+//
+// function doneResizing() {
+//     main.init();
+// }

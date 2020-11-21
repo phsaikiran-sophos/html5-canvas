@@ -37,6 +37,12 @@ class Animate {
         if (curr - this.startTime > 1000) {
             this.startTime = curr;
             this.frames = 0;
+
+            let element = document.querySelector("#" + this.c.id);
+            if (element) {
+                let style = window.getComputedStyle(element);
+                this.c.marginLeft = Number(style.marginLeft.slice(0, -2));
+            }
         }
     }
 

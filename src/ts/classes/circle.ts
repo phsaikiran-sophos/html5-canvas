@@ -129,11 +129,11 @@ class Circle {
                     let m1 = this.m;
                     let m2 = obj.m;
 
-                    this.dx = ((m1 - m2) * u1x / (m1 + m2)) + 2 * m2 * u2x / (m1 + m2);
-                    this.dy = ((m1 - m2) * u1y / (m1 + m2)) + 2 * m2 * u2y / (m1 + m2);
+                    this.dx = (((m1 - m2) * u1x / (m1 + m2)) + 2 * m2 * u2x / (m1 + m2)) * 0.98;
+                    this.dy = (((m1 - m2) * u1y / (m1 + m2)) + 2 * m2 * u2y / (m1 + m2)) * 0.98;
 
-                    obj.dx = (2 * m1 * u1x / (m1 + m2)) + (m2 - m1) * u2x / (m1 + m2);
-                    obj.dy = (2 * m1 * u1y / (m1 + m2)) + (m2 - m1) * u2y / (m1 + m2);
+                    obj.dx = ((2 * m1 * u1x / (m1 + m2)) + (m2 - m1) * u2x / (m1 + m2)) * 0.98;
+                    obj.dy = ((2 * m1 * u1y / (m1 + m2)) + (m2 - m1) * u2y / (m1 + m2)) * 0.98;
                 }
             }
         } else {
