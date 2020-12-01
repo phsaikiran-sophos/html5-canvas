@@ -1,7 +1,7 @@
 import Screen from "./screen";
-import {sObject, TextConfig} from "../types";
+import { Item, TextConfig } from "../types";
 
-class sText extends sObject<sText> {
+class sText extends Item<sText> {
     scr: Screen;
     text: string;
     x: number;
@@ -13,7 +13,7 @@ class sText extends sObject<sText> {
     svgText: SVGTextElement;
     svgTextNode: Text;
 
-    constructor({scr, text, x, y, fontSize, fontFamily, fillColor}: TextConfig) {
+    constructor({ scr, text, x, y, fontSize, fontFamily, fillColor }: TextConfig) {
         super();
         this.scr = scr;
         this.text = text ? text : "";

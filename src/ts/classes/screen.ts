@@ -1,4 +1,4 @@
-import {ScreenConfig, TextConfig} from "../types";
+import { ScreenConfig, TextConfig } from "../types";
 import Text from "./text";
 import sCircle from "./circle";
 import sText from "./text";
@@ -28,7 +28,7 @@ class Screen {
     frames: number;
     dtAccum: number;
 
-    constructor({id, name, type, height, width}: ScreenConfig) {
+    constructor({ id, name, type, height, width, dev }: ScreenConfig) {
         this.id = id;
         this.name = name ? name : id;
         this.dt = 0;
@@ -45,59 +45,61 @@ class Screen {
         el.innerHTML = "";
         this.parent = el;
 
-        let menuDiv = document.createElement("div");
-        menuDiv.className = "menu";
-        let pauseToggleButton = document.createElement("button");
-        pauseToggleButton.className = "menu-item";
-        pauseToggleButton.innerHTML = "Pause / Resume";
-        pauseToggleButton.onclick = this.pauseToggle;
-        let stopButton = document.createElement("button");
-        stopButton.className = "menu-item";
-        stopButton.innerHTML = "Stop";
-        stopButton.onclick = this.stop;
-        let restartButton = document.createElement("button");
-        restartButton.className = "menu-item";
-        restartButton.innerHTML = "Restart";
-        restartButton.onclick = this.restart;
+        if (dev) {
+            let menuDiv = document.createElement("div");
+            menuDiv.className = "menu";
+            let pauseToggleButton = document.createElement("button");
+            pauseToggleButton.className = "menu-item";
+            pauseToggleButton.innerHTML = "Pause / Resume";
+            pauseToggleButton.onclick = this.pauseToggle;
+            let stopButton = document.createElement("button");
+            stopButton.className = "menu-item";
+            stopButton.innerHTML = "Stop";
+            stopButton.onclick = this.stop;
+            let restartButton = document.createElement("button");
+            restartButton.className = "menu-item";
+            restartButton.innerHTML = "Restart";
+            restartButton.onclick = this.restart;
 
-        let selectLabel = document.createElement("label");
-        selectLabel.htmlFor = this.id + "-menu-select";
-        selectLabel.innerHTML = "Graphics type:";
-        let select = document.createElement("select");
-        select.id = this.id + "-menu-select";
-        select.className = "menu-item";
-        select.onchange = this.toggleType;
-        let svgOption = document.createElement("option");
-        svgOption.value = "svg";
-        svgOption.innerHTML = "SVG";
-        let canvasOption = document.createElement("option");
-        canvasOption.value = "canvas";
-        canvasOption.innerHTML = "Canvas";
-        select.appendChild(svgOption);
-        select.appendChild(canvasOption);
-        select.value = this.type;
+            let selectLabel = document.createElement("label");
+            selectLabel.htmlFor = this.id + "-menu-select";
+            selectLabel.innerHTML = "Graphics type:";
+            let select = document.createElement("select");
+            select.id = this.id + "-menu-select";
+            select.className = "menu-item";
+            select.onchange = this.toggleType;
+            let svgOption = document.createElement("option");
+            svgOption.value = "svg";
+            svgOption.innerHTML = "SVG";
+            let canvasOption = document.createElement("option");
+            canvasOption.value = "canvas";
+            canvasOption.innerHTML = "Canvas";
+            select.appendChild(svgOption);
+            select.appendChild(canvasOption);
+            select.value = this.type;
 
-        // let frameLabel = document.createElement("label");
-        // frameLabel.htmlFor = this.id + "-menu-frame-range";
-        // frameLabel.innerHTML = "Frames:";
-        // let range = document.createElement("input");
-        // range.id = this.id + "-menu-frame-range";
-        // range.className = "menu-item";
-        // range.type = "range";
-        // range.name = "frameLimit";
+            // let frameLabel = document.createElement("label");
+            // frameLabel.htmlFor = this.id + "-menu-frame-range";
+            // frameLabel.innerHTML = "Frames:";
+            // let range = document.createElement("input");
+            // range.id = this.id + "-menu-frame-range";
+            // range.className = "menu-item";
+            // range.type = "range";
+            // range.name = "frameLimit";
 
-        menuDiv.appendChild(pauseToggleButton);
-        menuDiv.appendChild(stopButton);
-        menuDiv.appendChild(restartButton);
-        menuDiv.appendChild(selectLabel);
-        menuDiv.appendChild(select);
-        // menuDiv.appendChild(frameLabel);
-        // menuDiv.appendChild(range);
+            menuDiv.appendChild(pauseToggleButton);
+            menuDiv.appendChild(stopButton);
+            menuDiv.appendChild(restartButton);
+            menuDiv.appendChild(selectLabel);
+            menuDiv.appendChild(select);
+            // menuDiv.appendChild(frameLabel);
+            // menuDiv.appendChild(range);
 
-        if (this.type === "canvas") {
-            el.appendChild(menuDiv);
-        } else if (this.type === "svg") {
-            el.appendChild(menuDiv);
+            if (this.type === "canvas") {
+                el.appendChild(menuDiv);
+            } else if (this.type === "svg") {
+                el.appendChild(menuDiv);
+            }
         }
 
         this.content = document.createElement("div");

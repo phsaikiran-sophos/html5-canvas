@@ -1,5 +1,5 @@
 import sCircle from "./classes/circle";
-import {CircleConfig} from "./types";
+import { CircleConfig } from "./types";
 import Screen from "./classes/screen";
 import Constants from "./classes/constants";
 
@@ -9,11 +9,12 @@ class Main {
             id: "random",
             type: "svg",
             height: Constants.canvas.height,
-            width: Constants.canvas.width
+            width: Constants.canvas.width,
+            dev: true
         });
         random.init = () => {
             random.objects = [];
-            for (let i = 0; i < 600; i++) {
+            for (let i = 0; i < 500; i++) {
                 let config: CircleConfig = {
                     scr: random,
                     x: Math.random() * (random.width - 4 * 2) + 4,
@@ -33,7 +34,8 @@ class Main {
             id: "gravity",
             type: "svg",
             height: Constants.canvas.height,
-            width: Constants.canvas.width
+            width: Constants.canvas.width,
+            dev: true
         });
         gravity.init = () => {
             gravity.objects = [];
@@ -59,7 +61,8 @@ class Main {
             id: "collision",
             type: "svg",
             height: Constants.canvas.height,
-            width: Constants.canvas.width
+            width: Constants.canvas.width,
+            dev: true
         });
         collision.init = () => {
             collision.objects = [];
@@ -113,7 +116,8 @@ class Main {
             id: "tbd",
             type: "svg",
             height: Constants.canvas.height,
-            width: Constants.canvas.width
+            width: Constants.canvas.width,
+            dev: true
         });
         tbd.init = () => {
             tbd.objects = [];

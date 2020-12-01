@@ -14,7 +14,7 @@ export type Scroll = {
     left: number
 }
 
-export class sObject<T> {
+export class Item<T> {
     update = () => {
         console.log("Update not defined");
     }
@@ -60,7 +60,8 @@ export type ScreenConfig = {
     name?: string,
     type?: "canvas" | "svg",
     height?: number,
-    width?: number
+    width?: number,
+    dev?: boolean
 }
 
 export type UpdateFunction = "random" | "gravity" | "collision";

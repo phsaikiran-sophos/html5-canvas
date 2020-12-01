@@ -1,4 +1,4 @@
-import {Color, Mouse, Scroll} from "../types";
+import { Color, Mouse, Scroll } from "../types";
 
 class Constants {
     color: Color;

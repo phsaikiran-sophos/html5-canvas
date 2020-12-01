@@ -1,10 +1,10 @@
 import Constants from "./constants";
-import {CircleConfig, UpdateFunction, sObject} from "../types";
+import { CircleConfig, UpdateFunction, Item } from "../types";
 import Screen from "./screen";
 
-const {color, mouse} = Constants;
+const { color, mouse } = Constants;
 
-class sCircle extends sObject<sCircle> {
+class sCircle extends Item<sCircle> {
     scr: Screen;
     temp: boolean;
     m: number;
@@ -25,7 +25,7 @@ class sCircle extends sObject<sCircle> {
 
     svgCircle: SVGCircleElement;
 
-    constructor({scr, temp, m, x, y, dx, dy, r, dr, minR, maxR, influenceR, gravity, friction, updateFunction, fillColor, opacity}: CircleConfig) {
+    constructor({ scr, temp, m, x, y, dx, dy, r, dr, minR, maxR, influenceR, gravity, friction, updateFunction, fillColor, opacity }: CircleConfig) {
         super();
         this.scr = scr;
         this.temp = temp ? temp : false;
