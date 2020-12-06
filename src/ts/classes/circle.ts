@@ -45,14 +45,14 @@ class sCircle extends Item<sCircle> {
         this.fillColor = fillColor ? fillColor : color.pallet[Math.floor(Math.random() * (color.pallet.length))];
         this.opacity = opacity ? opacity : 1;
 
-        if (this.scr.type === "svg" && !temp) {
+        if (this.scr.type === "svg" && !temp && this.scr.ctx instanceof SVGSVGElement) {
             this.svgCircle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
-            this.scr.svg.appendChild(this.svgCircle);
+            this.scr.ctx.appendChild(this.svgCircle);
         }
     }
 
     draw = () => {
-        if (this.scr.type === "canvas") {
+        if (this.scr.type === "canvas" && this.scr.ctx instanceof CanvasRenderingContext2D) {
             let ctx = this.scr.ctx;
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI, false);
@@ -64,7 +64,7 @@ class sCircle extends Item<sCircle> {
             ctx.strokeStyle = this.fillColor;
             ctx.stroke();
             ctx.closePath();
-        } else if (this.scr.type === "svg") {
+        } else if (this.scr.type === "svg" && this.scr.ctx instanceof SVGSVGElement) {
             this.svgCircle.setAttributeNS(null, "cx", String(this.x));
             this.svgCircle.setAttributeNS(null, "cy", String(this.y));
             this.svgCircle.setAttributeNS(null, "r", String(this.r));

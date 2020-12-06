@@ -33,13 +33,13 @@ class sParticle extends Item<sParticle> {
         this.updateFunction = updateFunction ? updateFunction : "random";
         this.strokeColor = strokeColor ? strokeColor : color.pallet[Math.floor(Math.random() * (color.pallet.length))];
 
-        if (this.scr.type === "svg") {
+        if (this.scr.type === "svg" && this.scr.ctx instanceof SVGSVGElement) {
             if (this.type === "rect") {
                 this.svgPoint = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-                this.scr.svg.appendChild(this.svgPoint);
+                this.scr.ctx.appendChild(this.svgPoint);
             } else if (this.type === "circle") {
                 this.svgPoint = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                this.scr.svg.appendChild(this.svgPoint);
+                this.scr.ctx.appendChild(this.svgPoint);
             } else {
                 console.error("Invalid particle type");
             }
@@ -47,7 +47,7 @@ class sParticle extends Item<sParticle> {
     }
 
     draw = () => {
-        if (this.scr.type === "canvas") {
+        if (this.scr.type === "canvas" && this.scr.ctx instanceof CanvasRenderingContext2D) {
             if (this.type === "rect") {
                 let ctx = this.scr.ctx;
                 ctx.beginPath();
@@ -69,7 +69,7 @@ class sParticle extends Item<sParticle> {
             } else {
                 console.error("Invalid particle type");
             }
-        } else if (this.scr.type === "svg") {
+        } else if (this.scr.type === "svg" && this.scr.ctx instanceof SVGSVGElement) {
             if (this.type === "rect") {
                 this.svgPoint.setAttributeNS(null, "x", String(this.x - this.r * 0.5));
                 this.svgPoint.setAttributeNS(null, "y", String(this.y - this.r * 0.5));

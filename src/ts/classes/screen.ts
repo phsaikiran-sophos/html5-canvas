@@ -1,5 +1,5 @@
 import Common from "./common";
-import { ScreenConfig, TextConfig } from "../types";
+import { ScreenConfig, ScreenType, TextConfig } from "../types";
 import Text from "./text";
 import sCircle from "./circle";
 import sText from "./text";
@@ -11,7 +11,7 @@ class Screen {
     name: string;
     dt: number;
     fps: number;
-    type: "canvas" | "svg" | "webgl2"
+    type: ScreenType
     height: number;
     width: number;
     dev: boolean;
@@ -23,8 +23,7 @@ class Screen {
     parent: Element;
     el: HTMLCanvasElement | SVGSVGElement;
     content: HTMLDivElement;
-    ctx: CanvasRenderingContext2D;
-    svg: SVGSVGElement;
+    ctx: CanvasRenderingContext2D | SVGSVGElement | WebGL2RenderingContext;
 
     loaded: boolean;
     state: "neverStarted" | "paused" | "running" | "stopped" | "stateChange";
@@ -118,7 +117,7 @@ class Screen {
             } else if (this.type === "svg") {
                 el.appendChild(menuDiv);
             } else if (this.type === "webgl2") {
-
+                el.appendChild(menuDiv);
             } else {
                 console.error("Invalid type given to initialize screen");
                 return;
@@ -159,9 +158,20 @@ class Screen {
             svgElement.setAttributeNS(null, "width", String(this.width));
             this.content.appendChild(svgElement);
             this.el = svgElement;
-            this.svg = svgElement;
+            this.ctx = svgElement;
         } else if (this.type === "webgl2") {
-
+            let canvasElement = document.createElement("canvas");
+            canvasElement.id = `${this.id}-webgl2`;
+            canvasElement.height = this.height;
+            canvasElement.width = this.width;
+            this.content.appendChild(canvasElement);
+            this.el = canvasElement;
+            let ctx = this.el.getContext("webgl2");
+            if (!ctx) {
+                console.error("Could not create canvas context");
+                return false;
+            }
+            this.ctx = ctx;
         } else {
             console.error("Invalid type given to initialize screen");
             return false;
@@ -189,10 +199,12 @@ class Screen {
         if (!this.loaded) {
             return;
         }
-        if (this.type === "canvas") {
+        if (this.type === "canvas" && this.ctx instanceof CanvasRenderingContext2D) {
             this.ctx.clearRect(0, 0, this.width, this.height);
-        } else if (this.type === "svg") {
+        } else if (this.type === "svg" && this.ctx instanceof SVGSVGElement) {
             // No need to clean the screen for SVG
+        } else {
+            console.error("Invalid type given to clear screen");
         }
     }
 
@@ -204,8 +216,8 @@ class Screen {
         if (!this.loaded) {
             return;
         }
-        if (this.type === "svg") {
-            this.svg.innerHTML = "";
+        if (this.type === "svg" && this.ctx instanceof SVGSVGElement) {
+            this.ctx.innerHTML = "";
         }
         this.state = "paused";
         this.init();
@@ -307,9 +319,11 @@ class Screen {
             this.screenX = boundingClientRect.left;
             this.screenY = boundingClientRect.top;
         } else if (this.type === "svg") {
-            let boundingClientRect = this.svg.getBoundingClientRect();
+            let boundingClientRect = this.el.getBoundingClientRect();
             this.screenX = boundingClientRect.left;
             this.screenY = boundingClientRect.top;
+        } else {
+            console.error("Invalid type given to update screen boundings");
         }
     }
 

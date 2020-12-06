@@ -68,10 +68,12 @@ export type TextConfig = {
     fillColor?: string,
 }
 
+export type ScreenType = "canvas" | "svg" | "webgl2" | "invalid"
+
 export type ScreenConfig = {
     id: string,
     name?: string,
-    type?: "canvas" | "svg" | "webgl2",
+    type?: ScreenType,
     height?: number,
     width?: number,
     dev?: boolean,
