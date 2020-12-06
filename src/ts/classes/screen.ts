@@ -1,8 +1,8 @@
 import Common from "./common";
 import { ScreenConfig, ScreenType, TextConfig } from "../types";
 import Text from "./text";
-import sCircle from "./circle";
 import sText from "./text";
+import sCircle from "./circle";
 import sParticle from "./particle";
 import Stats from "stats.js";
 
@@ -85,8 +85,12 @@ class Screen {
             let canvasOption = document.createElement("option");
             canvasOption.value = "canvas";
             canvasOption.innerHTML = "Canvas";
+            let webgl2Option = document.createElement("option");
+            webgl2Option.value = "webgl2";
+            webgl2Option.innerHTML = "WebGL2";
             select.appendChild(svgOption);
             select.appendChild(canvasOption);
+            select.appendChild(webgl2Option);
             select.value = this.type;
 
             // let frameLabel = document.createElement("label");
@@ -168,7 +172,7 @@ class Screen {
             this.el = canvasElement;
             let ctx = this.el.getContext("webgl2");
             if (!ctx) {
-                console.error("Could not create canvas context");
+                console.error("Could not create WebGL2 context");
                 return false;
             }
             this.ctx = ctx;
@@ -203,6 +207,8 @@ class Screen {
             this.ctx.clearRect(0, 0, this.width, this.height);
         } else if (this.type === "svg" && this.ctx instanceof SVGSVGElement) {
             // No need to clean the screen for SVG
+        } else if (this.type === "webgl2" && this.ctx instanceof WebGL2RenderingContext) {
+            // this.ctx.clearRect(0, 0, this.width, this.height);
         } else {
             console.error("Invalid type given to clear screen");
         }
@@ -305,11 +311,11 @@ class Screen {
         }
     }
 
-    toggleType = () => {
+    private toggleType = () => {
         if (!this.loaded) {
             return;
         }
-        this.type = this.type === "svg" ? "canvas" : "svg";
+        this.type = (document.getElementById(this.id + "-menu-select")! as HTMLSelectElement).value as ScreenType;
         this.load(false);
     }
 
@@ -322,8 +328,12 @@ class Screen {
             let boundingClientRect = this.el.getBoundingClientRect();
             this.screenX = boundingClientRect.left;
             this.screenY = boundingClientRect.top;
+        } else if (this.type === "webgl2") {
+            let boundingClientRect = this.el.getBoundingClientRect();
+            this.screenX = boundingClientRect.left;
+            this.screenY = boundingClientRect.top;
         } else {
-            console.error("Invalid type given to update screen boundings");
+            console.error("Invalid type given to update screen bounding");
         }
     }
 

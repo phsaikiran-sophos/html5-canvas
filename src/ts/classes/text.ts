@@ -50,6 +50,10 @@ class sText extends Item<sText> {
             this.svgText.setAttributeNS(null, "fill", this.fillColor);
             this.svgTextNode.deleteData(0, this.svgTextNode.data.length);
             this.svgTextNode.insertData(0, text);
+        } else if (this.scr.type === "webgl2" && this.scr.ctx instanceof WebGL2RenderingContext) {
+
+        } else {
+            console.error("Invalid type given to draw text");
         }
     }
 }

@@ -71,6 +71,10 @@ class sCircle extends Item<sCircle> {
             this.svgCircle.setAttributeNS(null, "stroke", this.fillColor);
             this.svgCircle.setAttributeNS(null, "fill", this.fillColor);
             this.svgCircle.setAttributeNS(null, "fill-opacity", String(this.opacity));
+        } else if (this.scr.type === "webgl2" && this.scr.ctx instanceof WebGL2RenderingContext) {
+
+        } else {
+            console.error("Invalid type given to draw circle");
         }
     }
 

@@ -86,6 +86,10 @@ class sParticle extends Item<sParticle> {
             } else {
                 console.error("Invalid particle type");
             }
+        } else if (this.scr.type === "webgl2" && this.scr.ctx instanceof WebGL2RenderingContext) {
+
+        } else {
+            console.error("Invalid type given to draw particle");
         }
     }
 

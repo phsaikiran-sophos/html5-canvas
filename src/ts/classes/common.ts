@@ -16,11 +16,11 @@ class Common {
     constructor() {
         this.color = {
             pallet: [
-                '#0E4061',
+                '#60676B',
                 '#67B3E6',
                 '#1F93E0',
-                '#60676B',
                 '#1871AD',
+                '#0E4061',
                 '#BFAC9B',
                 '#D98F4E',
                 '#BF6E3F',
