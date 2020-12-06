@@ -22,7 +22,7 @@ module.exports = {
                 use: [
                     {
                         loader: 'file-loader',
-                        options: {outputPath: 'css/', name: '[name].css'}
+                        options: { outputPath: 'css/', name: '[name].css' }
                     },
                     "sass-loader"
                 ]
@@ -34,13 +34,14 @@ module.exports = {
         filename: "js/[name].js",
     },
     resolve: {
-        extensions: ['.ts']
+        extensions: [ '.ts' ]
     },
     plugins: [
         new CopyPlugin({
             patterns: [
                 {
-                    from: path.join(__dirname, 'src/index.html'), to: path.resolve(__dirname, 'build/index.html')
+                    from: path.join(__dirname, 'src/index.html'),
+                    to: path.resolve(__dirname, 'build/index.html')
                 }
             ],
             options: {

@@ -26,16 +26,23 @@ body {
 .menu {
   height: 30px;
   background-color: #242424;
+  display: flex;
 }
 
-label {
+.menu-label {
   color: #bfac9b;
   padding-left: 10px;
+  background-color: #242424;
+  align-self: center;
 }
 
 .menu-item {
-  margin-top: 5px;
   margin-left: 6px;
   background-color: #bfac9b;
   color: black;
+  align-self: center;
+}
+
+.menu-align-end {
+  margin-left: auto;
 }

@@ -25,6 +25,19 @@ export class Item<T> {
     }
 }
 
+export type ParticleConfig = {
+    scr: Screen,
+    type?: "rect" | "circle",
+    m?: number,
+    x?: number,
+    y?: number,
+    dx?: number,
+    dy?: number,
+    scale?: number,
+    updateFunction?: UpdateFunction,
+    strokeColor?: string
+}
+
 export type CircleConfig = {
     scr: Screen,
     temp?: boolean,
@@ -61,7 +74,8 @@ export type ScreenConfig = {
     type?: "canvas" | "svg",
     height?: number,
     width?: number,
-    dev?: boolean
+    dev?: boolean,
+    gravity?: number
 }
 
 export type UpdateFunction = "random" | "gravity" | "collision";

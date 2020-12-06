@@ -1,15 +1,16 @@
 import sCircle from "./classes/circle";
-import { CircleConfig } from "./types";
+import { CircleConfig, ParticleConfig } from "./types";
 import Screen from "./classes/screen";
-import Constants from "./classes/constants";
+import Common from "./classes/common";
+import sParticle from "./classes/particle";
 
 class Main {
     init = () => {
         let random = new Screen({
             id: "random",
             type: "svg",
-            height: Constants.canvas.height,
-            width: Constants.canvas.width,
+            height: Common.canvas.height,
+            width: Common.canvas.width,
             dev: true
         });
         random.init = () => {
@@ -33,8 +34,8 @@ class Main {
         let gravity = new Screen({
             id: "gravity",
             type: "svg",
-            height: Constants.canvas.height,
-            width: Constants.canvas.width,
+            height: Common.canvas.height,
+            width: Common.canvas.width,
             dev: true
         });
         gravity.init = () => {
@@ -60,8 +61,8 @@ class Main {
         let collision = new Screen({
             id: "collision",
             type: "svg",
-            height: Constants.canvas.height,
-            width: Constants.canvas.width,
+            height: Common.canvas.height,
+            width: Common.canvas.width,
             dev: true
         });
         collision.init = () => {
@@ -112,17 +113,28 @@ class Main {
         }
         collision.start();
 
-        let tbd = new Screen({
-            id: "tbd",
+        let particle = new Screen({
+            id: "particle",
             type: "svg",
-            height: Constants.canvas.height,
-            width: Constants.canvas.width,
+            height: Common.canvas.height,
+            width: Common.canvas.width,
             dev: true
         });
-        tbd.init = () => {
-            tbd.objects = [];
+        particle.onClick = (x: number, y: number) => {
+            let scale = 10;
+            let config: ParticleConfig = {
+                scr: particle,
+                type: "circle",
+                x: x,
+                y: y,
+                scale: scale
+            }
+            particle.objects.push(new sParticle(config));
         }
-        tbd.start();
+        particle.init = () => {
+            particle.objects = [];
+        }
+        particle.start();
     }
 }
 

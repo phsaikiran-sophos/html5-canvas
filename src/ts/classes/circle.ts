@@ -1,8 +1,8 @@
-import Constants from "./constants";
+import Common from "./common";
 import { CircleConfig, UpdateFunction, Item } from "../types";
 import Screen from "./screen";
 
-const { color, mouse } = Constants;
+const {color, mouse} = Common;
 
 class sCircle extends Item<sCircle> {
     scr: Screen;
@@ -25,7 +25,7 @@ class sCircle extends Item<sCircle> {
 
     svgCircle: SVGCircleElement;
 
-    constructor({ scr, temp, m, x, y, dx, dy, r, dr, minR, maxR, influenceR, gravity, friction, updateFunction, fillColor, opacity }: CircleConfig) {
+    constructor({scr, temp, m, x, y, dx, dy, r, dr, minR, maxR, influenceR, gravity, friction, updateFunction, fillColor, opacity}: CircleConfig) {
         super();
         this.scr = scr;
         this.temp = temp ? temp : false;
@@ -93,8 +93,8 @@ class sCircle extends Item<sCircle> {
         if (this.updateFunction === "random") {
             this.move();
 
-            if (mouse.x - this.scr.left - this.x < this.influenceR && mouse.x - this.scr.left - this.x > -this.influenceR &&
-                mouse.y - this.scr.top - this.y < this.influenceR && mouse.y - this.scr.top - this.y > -this.influenceR &&
+            if (mouse.x - this.scr.screenX - this.x < this.influenceR && mouse.x - this.scr.screenX - this.x > -this.influenceR &&
+                mouse.y - this.scr.screenY - this.y < this.influenceR && mouse.y - this.scr.screenY - this.y > -this.influenceR &&
                 this.r < this.maxR) {
                 this.r += this.dr;
             } else if ((this.r - this.dr + 1) > this.minR) {

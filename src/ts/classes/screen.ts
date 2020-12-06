@@ -1,7 +1,10 @@
+import Common from "./common";
 import { ScreenConfig, TextConfig } from "../types";
 import Text from "./text";
 import sCircle from "./circle";
 import sText from "./text";
+import sParticle from "./particle";
+import Stats from "stats.js";
 
 class Screen {
     id: string;
@@ -9,13 +12,17 @@ class Screen {
     dt: number;
     fps: number;
     type: "canvas" | "svg"
+    height: number;
+    width: number;
+    dev: boolean;
+    gravity: number;
+
+    screenX: number;
+    screenY: number;
+    stats: Stats;
     parent: Element;
     el: HTMLCanvasElement | SVGSVGElement;
     content: HTMLDivElement;
-    height: number;
-    width: number;
-    top: number;
-    left: number;
     ctx: CanvasRenderingContext2D;
     svg: SVGSVGElement;
 
@@ -28,7 +35,8 @@ class Screen {
     frames: number;
     dtAccum: number;
 
-    constructor({ id, name, type, height, width, dev }: ScreenConfig) {
+    constructor({id, name, type, height, width, dev, gravity}: ScreenConfig) {
+        console.log(Stats);
         this.id = id;
         this.name = name ? name : id;
         this.dt = 0;
@@ -36,6 +44,8 @@ class Screen {
         this.type = type ? type : "canvas";
         this.height = height ? height : 300;
         this.width = width ? width : 400;
+        this.dev = dev ? dev : false;
+        this.gravity = gravity ? gravity : 0;
 
         let el = document.querySelector("#" + this.id);
         if (!el) {
@@ -62,6 +72,7 @@ class Screen {
             restartButton.onclick = this.restart;
 
             let selectLabel = document.createElement("label");
+            selectLabel.className = "menu-label";
             selectLabel.htmlFor = this.id + "-menu-select";
             selectLabel.innerHTML = "Graphics type:";
             let select = document.createElement("select");
@@ -95,6 +106,12 @@ class Screen {
             // menuDiv.appendChild(frameLabel);
             // menuDiv.appendChild(range);
 
+            this.stats = new Stats();
+            this.stats.showPanel(0);
+            this.stats.dom.className = "menu-align-end";
+            this.stats.dom.style.position = "";
+            menuDiv.appendChild(this.stats.dom);
+
             if (this.type === "canvas") {
                 el.appendChild(menuDiv);
             } else if (this.type === "svg") {
@@ -107,6 +124,8 @@ class Screen {
         el.appendChild(this.content);
 
         this.load(true);
+
+        Common.screenList.push(this);
     }
 
     load = (firstLoad: boolean) => {
@@ -156,7 +175,7 @@ class Screen {
         if (this.type === "canvas") {
             this.ctx.clearRect(0, 0, this.width, this.height);
         } else if (this.type === "svg") {
-            // No need to clean any objects for SVG
+            // No need to clean the screen for SVG
         }
     }
 
@@ -184,6 +203,10 @@ class Screen {
         this.state = "running";
     }
 
+    // @ts-ignore
+    onClick = (x: number, y: number) => {
+    }
+
     typeTransfer = () => {
         this.state = "paused";
         let objects: any[] = [];
@@ -195,6 +218,11 @@ class Screen {
                 }));
             } else if (object instanceof sText) {
                 objects.push(new sText({
+                    ...object,
+                    scr: this
+                }));
+            } else if (object instanceof sParticle) {
+                objects.push(new sParticle({
                     ...object,
                     scr: this
                 }));
@@ -244,12 +272,12 @@ class Screen {
     updateBounding = () => {
         if (this.type === "canvas") {
             let boundingClientRect = this.el.getBoundingClientRect();
-            this.top = boundingClientRect.top;
-            this.left = boundingClientRect.left;
+            this.screenX = boundingClientRect.left;
+            this.screenY = boundingClientRect.top;
         } else if (this.type === "svg") {
             let boundingClientRect = this.svg.getBoundingClientRect();
-            this.top = boundingClientRect.top;
-            this.left = boundingClientRect.left;
+            this.screenX = boundingClientRect.left;
+            this.screenY = boundingClientRect.top;
         }
     }
 
@@ -279,8 +307,14 @@ class Screen {
     }
 
     animate = () => {
+        if (this.dev) {
+            this.stats.begin();
+        }
         requestAnimationFrame(this.animate);
         this.updateFrame();
+        if (this.dev) {
+            this.stats.end();
+        }
     }
 
 }
