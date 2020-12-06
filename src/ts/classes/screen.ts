@@ -36,7 +36,6 @@ class Screen {
     dtAccum: number;
 
     constructor({id, name, type, height, width, dev, gravity}: ScreenConfig) {
-        console.log(Stats);
         this.id = id;
         this.name = name ? name : id;
         this.dt = 0;

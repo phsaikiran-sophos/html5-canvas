@@ -8,6 +8,7 @@
       "es6",
       "esnext.asynciterable"
     ],
+    "skipLibCheck": true,
     "sourceMap": true,
     "outDir": "./dist/js",
     "moduleResolution": "node",
