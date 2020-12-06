@@ -11,7 +11,7 @@ class Screen {
     name: string;
     dt: number;
     fps: number;
-    type: "canvas" | "svg"
+    type: "canvas" | "svg" | "webgl2"
     height: number;
     width: number;
     dev: boolean;
@@ -26,6 +26,7 @@ class Screen {
     ctx: CanvasRenderingContext2D;
     svg: SVGSVGElement;
 
+    loaded: boolean;
     state: "neverStarted" | "paused" | "running" | "stopped" | "stateChange";
     objects: any[];
     startTime: number;
@@ -46,6 +47,7 @@ class Screen {
         this.dev = dev ? dev : false;
         this.gravity = gravity ? gravity : 0;
 
+        this.loaded = false;
         let el = document.querySelector("#" + this.id);
         if (!el) {
             console.error("No element with id " + this.id);
@@ -115,6 +117,11 @@ class Screen {
                 el.appendChild(menuDiv);
             } else if (this.type === "svg") {
                 el.appendChild(menuDiv);
+            } else if (this.type === "webgl2") {
+
+            } else {
+                console.error("Invalid type given to initialize screen");
+                return;
             }
         }
 
@@ -122,12 +129,14 @@ class Screen {
         this.content.id = this.id + "-content";
         el.appendChild(this.content);
 
-        this.load(true);
+        this.loaded = this.load(true);
 
-        Common.screenList.push(this);
+        if (this.loaded) {
+            Common.screenList.push(this);
+        }
     }
 
-    load = (firstLoad: boolean) => {
+    private load = (firstLoad: boolean): boolean => {
         this.state = "stopped";
         this.content.innerHTML = "";
         if (this.type === "canvas") {
@@ -140,7 +149,7 @@ class Screen {
             let ctx = this.el.getContext("2d");
             if (!ctx) {
                 console.error("Could not create canvas context");
-                return;
+                return false;
             }
             this.ctx = ctx;
         } else if (this.type === "svg") {
@@ -151,6 +160,11 @@ class Screen {
             this.content.appendChild(svgElement);
             this.el = svgElement;
             this.svg = svgElement;
+        } else if (this.type === "webgl2") {
+
+        } else {
+            console.error("Invalid type given to initialize screen");
+            return false;
         }
 
         this.updateBounding();
@@ -168,9 +182,13 @@ class Screen {
             this.state = "running";
             this.start();
         }
+        return true;
     }
 
-    clear = () => {
+    private clear = () => {
+        if (!this.loaded) {
+            return;
+        }
         if (this.type === "canvas") {
             this.ctx.clearRect(0, 0, this.width, this.height);
         } else if (this.type === "svg") {
@@ -183,6 +201,9 @@ class Screen {
     }
 
     restart = () => {
+        if (!this.loaded) {
+            return;
+        }
         if (this.type === "svg") {
             this.svg.innerHTML = "";
         }
@@ -206,7 +227,7 @@ class Screen {
     onClick = (x: number, y: number) => {
     }
 
-    typeTransfer = () => {
+    private typeTransfer = () => {
         this.state = "paused";
         let objects: any[] = [];
         this.objects.forEach((object) => {
@@ -245,6 +266,9 @@ class Screen {
     }
 
     start = () => {
+        if (!this.loaded) {
+            return;
+        }
         if (this.state === "neverStarted") {
             this.restart();
             this.animate();
@@ -254,21 +278,30 @@ class Screen {
     }
 
     stop = () => {
+        if (!this.loaded) {
+            return;
+        }
         this.state = "stopped";
     }
 
     pauseToggle = () => {
+        if (!this.loaded) {
+            return;
+        }
         if (this.state !== "stopped") {
             this.state = this.state === "running" ? "paused" : "running";
         }
     }
 
     toggleType = () => {
+        if (!this.loaded) {
+            return;
+        }
         this.type = this.type === "svg" ? "canvas" : "svg";
         this.load(false);
     }
 
-    updateBounding = () => {
+    private updateBounding = () => {
         if (this.type === "canvas") {
             let boundingClientRect = this.el.getBoundingClientRect();
             this.screenX = boundingClientRect.left;
@@ -280,7 +313,7 @@ class Screen {
         }
     }
 
-    updateFrameData = () => {
+    private updateFrameData = () => {
         let curr = new Date().getTime();
         this.dt = curr - this.prevTime;
         this.dtAccum = curr - this.prevAccTime;
@@ -293,7 +326,7 @@ class Screen {
         this.prevTime = curr;
     }
 
-    updateFrame = () => {
+    private updateFrame = () => {
         if (this.state === "running") {
             this.clear();
             this.frames += 1;
@@ -305,7 +338,7 @@ class Screen {
         }
     }
 
-    animate = () => {
+    private animate = () => {
         if (this.dev) {
             this.stats.begin();
         }

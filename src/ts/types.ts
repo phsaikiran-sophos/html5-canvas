@@ -71,7 +71,7 @@ export type TextConfig = {
 export type ScreenConfig = {
     id: string,
     name?: string,
-    type?: "canvas" | "svg",
+    type?: "canvas" | "svg" | "webgl2",
     height?: number,
     width?: number,
     dev?: boolean,
