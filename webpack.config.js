@@ -30,7 +30,7 @@ module.exports = {
         ]
     },
     output: {
-        path: path.resolve(__dirname, 'build'),
+        path: path.resolve(__dirname, 'public'),
         filename: "js/[name].js",
     },
     resolve: {
@@ -41,11 +41,11 @@ module.exports = {
             patterns: [
                 {
                     from: path.join(__dirname, 'src/index.html'),
-                    to: path.resolve(__dirname, 'build/index.html')
+                    to: path.resolve(__dirname, 'public/index.html')
                 },
                 {
                     from: path.join(__dirname, 'src/favicon.ico'),
-                    to: path.resolve(__dirname, 'build/favicon.ico')
+                    to: path.resolve(__dirname, 'public/favicon.ico')
                 }
             ],
             options: {
