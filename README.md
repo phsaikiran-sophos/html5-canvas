@@ -1,4 +1,4 @@
-# HTML5 SVG Canvas App
+# HTML5 SVG and Canvas App
 
 ## Setup
 
