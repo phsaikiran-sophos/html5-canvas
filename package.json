@@ -1,31 +1,27 @@
 {
-  "homepage": "http://phsaikiran-sophos.github.io/html5-canvas",
+  "homepage": "https://svg-canvas.phsaikiran.com/",
   "name": "html5-canvas",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node index.js",
-    "build": "webpack",
+    "build": "rm -rf ./public & webpack",
     "watch": "webpack -w",
-    "serve": "serve ./public",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d public"
+    "serve": "serve ./public"
   },
   "devDependencies": {
-    "@types/node": "^14.14.7",
+    "@types/node": "^15.0.3",
     "@types/stats.js": "^0.17.0",
-    "copy-webpack-plugin": "^6.3.1",
+    "copy-webpack-plugin": "^6.4.1",
     "file-loader": "^6.2.0",
-    "gh-pages": "^3.1.0",
     "node-sass": "^5.0.0",
-    "sass": "^1.29.0",
-    "sass-loader": "^10.1.0",
+    "sass": "^1.32.13",
+    "sass-loader": "^10.2.0",
     "serve": "^11.3.2",
     "stats.js": "^0.17.0",
-    "ts-loader": "^8.0.11",
-    "typescript": "^4.0.5",
-    "webpack": "^5.5.0",
-    "webpack-cli": "^4.2.0"
+    "ts-loader": "^8.2.0",
+    "typescript": "^4.2.4",
+    "webpack": "^5.37.0",
+    "webpack-cli": "^4.7.0"
   },
   "dependencies": {
     "node-static": "^0.7.11"

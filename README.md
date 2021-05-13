@@ -1,4 +1,4 @@
-# HTML5 SVG and Canvas App
+# SVG and Canvas App
 
 ## Setup
 
@@ -10,4 +10,4 @@ yarn serve
 
 ## Demo
 
-[Click here](http://phsaikiran.github.io/html5-svg-canvas) for the demo.
+[Click here](https://svg-canvas.phsaikiran.com) for the demo.
